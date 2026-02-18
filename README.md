@@ -1,73 +1,93 @@
-# Welcome to your Lovable project
+# Dino Discovery Camp Roster
 
-## Project info
+A full-stack web application for managing the Dino Discovery Camp summer roster. View enrolled campers and edit their usernames and emojis. Data is persisted in PostgreSQL.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## What It Does
 
-## How can I edit this code?
+- **View campers** — Displays all enrolled campers with name, username, and emoji
+- **Edit usernames** — Save username and emoji changes that persist in the database
+- **REST API** — Backend exposes `GET /api/users` and `PATCH /api/users/:id` for roster data
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui, TanStack Query
+- **Backend:** Node.js, Express
+- **Database:** PostgreSQL
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ and npm
+- PostgreSQL
 
-**Use your preferred IDE**
+## How to Run
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### 1. Clone and install
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone <YOUR_REPO_URL>
+cd dino-camp-roster-frontend-only
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 2. Set up the database
 
-# Step 3: Install the necessary dependencies.
-npm i
+Create a PostgreSQL database named `dinocamp`, then run:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```sh
+psql -d dinocamp -f db/schema.sql
+psql -d dinocamp -f db/seed.sql
+```
+
+If you have an existing `users` table without `username`/`emoji` columns, run `db/migrate-add-username-emoji.sql` first, then re-seed as needed.
+
+### 3. Configure environment
+
+Copy `.env.example` to `.env` and update values:
+
+```sh
+cp .env.example .env
+```
+
+Edit `.env`:
+
+- `DATABASE_URL` — PostgreSQL connection string (e.g. `postgresql://USER:PASSWORD@localhost:5432/dinocamp`)
+- `VITE_API_URL` — API base URL for the frontend (default `http://localhost:3000`)
+
+### 4. Start the backend
+
+```sh
+cd backend
+npm install
+node server.js
+```
+
+The API runs at `http://localhost:3000`.
+
+### 5. Start the frontend
+
+In a new terminal:
+
+```sh
+cd frontend
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open the URL shown in the terminal (typically `http://localhost:5173`).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Quick reference
 
-**Use GitHub Codespaces**
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start frontend dev server |
+| `npm run dev:backend` | Start backend API |
+| `npm run build` | Build frontend for production |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```
+├── frontend/       # React + Vite app
+├── backend/        # Express API
+├── db/             # schema, seed, migrations
+└── .env            # Environment config (create from .env.example)
+```
